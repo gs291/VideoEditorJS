@@ -4,9 +4,13 @@
 
 /* Fonction pour ajouter un fichier externe (aussi utilisée lors du chargement d'un projet), elle se présente en plusieurs parties et utilise
 d'autres fonctions ainsi que pour les éléments vidéo/audio FFMPEG (donc le TerminalJS, ref. lib/TerminalJS/TerminalJS.js) */
+// Function to add an external file(also used when loading a project), it comes in several parts and uses
+// other functions as well as for the video / audio elements FFMPEG(thus the TerminalJS, ref.lib / TerminalJS / TerminalJS.js)
+
 function addFile(currentFile) {
 
     //Remplacement des minuscules par des majuscules et des accents pour simplifier
+    // Replacing lowercase letters with capital letters and accents to simplify
     var fileName = currentFile.name.deleteAccent().replace(new RegExp(' ', 'g'), '_');
 
     var typeFile = getTypeFile(fileName);
@@ -22,11 +26,13 @@ function addFile(currentFile) {
         currentProject.tabListFiles.push(currentItem);
 
         //Ajout graphique et upload du fichier
+        //Add graphic and upload file
         addFileList(fileId, fileName, typeFile);
         uploadFile(fileId, fileUId, fileName, currentFile, 'FILE', currentItem.format);
 
         if (typeFile == TYPE.IMAGE) {
             //Définition des propriété d'une image
+            // Graphical addition and upload of the Definition of property of a filefile
             currentItem.makeVideo();
             currentItem.setDuration('00:00:20');
             currentItem.setThumbnailImage(window.URL.createObjectURL(new Blob([currentFile])));
@@ -161,11 +167,20 @@ function fileProcessing(fileId, arrayBuffer)
             terminal.Workers[index].worker.terminate();
 
             if (fileClass.type == TYPE.VIDEO) {
+                console.log("THISISISISISIS:     " + currentProject.tabListFiles.length - 1);
+                console.log("_______________HORSESE:     " + currentProject.tabListFiles[currentProject.tabListFiles.length - 1].duration)
+                for(var i = 0; i < currentProject.tabListFiles.lenght; i++){
+                    console.log(currentProject.tabListFiles[i]);
+                }
+                
+                // while(currentProject.tabListFiles[currentProject.tabListFiles.length - 1].duration == undefined){
+                //     console.log("HUNGRY HUNGRY PAPA");
+                // }
                 terminal.processCmd("ffmpeg -ss " + Math.floor(timeToSeconds(currentProject.tabListFiles[currentProject.tabListFiles.length - 1].duration) / 2) + " -i " + fileClass.fileName + " -frames:v 1 thumbnail.jpg", function (e, index) {
 
                     var message = e.data;
 
-                    if (message.type == "stdout") {
+                    if (message.type == "x`") {
                         console.log(message.text);
                     }
                     else if (message.type == "stop") {

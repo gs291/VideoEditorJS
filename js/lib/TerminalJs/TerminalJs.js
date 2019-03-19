@@ -30,7 +30,7 @@ Terminal.prototype.exist = function(bin){
 };
 Terminal.prototype.processCmd = function(cmd, callback){
     that = this;
-    console.log(cmd, cmd.split(" ")[0]);
+    console.log("DOGS: " + cmd, cmd.split(" ")[0]);
     if (this.exist(cmd.split(" ")[0]))
     {
         var workerId = this.GenerateWorkerId();

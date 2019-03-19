@@ -72,12 +72,17 @@ playPause.onclick = function() {
 function captureUserMedia(callback) {
     navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
     playPause.removeAttribute("disabled");
+    
     navigator.getUserMedia(para, function (stream) {
         startRecordingbtn.disabled = true;
         stopRecordingbtn.disabled = false;
         playPause.disabled = true;
         playElement.muted = true;
-        playElement.src = URL.createObjectURL(stream);
+        try {
+            playElement.srcObject = stream;
+        } catch(error){
+            playElement.src = URL.createObjectURL(stream);
+        }
         localStream = stream;
         playElement.muted = true;
         playElement.play();
@@ -183,7 +188,7 @@ stopRecordingbtn.onclick = function () {
                         audioData = new Uint8Array(this.response);
                         //console.log("Les data sont donc", audioData, "et vid : ", videoData);
                         $('#recordAudioOrVideoElement').modal('hide');
-                        loadM();
+                        hLoadM();
                         var time = Date.now();
 
                         terminal.Files.push({name:"audio"+time, data: audioData});
@@ -278,7 +283,12 @@ document.getElementById('buttonSaveRecord').onclick = function(){
                                 var buffers = message.data;
                                 buffers.forEach(function (file) {
                                     var blob = new Blob([file.data]);
-                                    var audioUrl = URL.createObjectURL(blob);
+                                    var audioUrl;
+                                    try {
+                                        audioUrl.srcObject = blob;
+                                    } catch (error) {
+                                        audioUrl = URL.createObjectURL(blob);
+                                    }
                                     console.log("mp4 video -> ",audioUrl);
 
                                     var reader = new FileReader();

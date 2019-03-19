@@ -24,62 +24,11 @@ function makeRender(format) {
         eId('startedDate').innerHTML = "Début du traitement";
         eId('SrvLoad').innerHTML = "Charge du serveur";
 
-        var timer = window.setInterval(function(){
-
-            var url = config.apiPath + 'php/renderStat.php?action=read&id='+currentProject.username+"_"+currentProject.name;
-
-            var xhr = createCORSRequest('GET', url);
-
-            if (!xhr) {
-                noty({layout: 'topRight', type: 'error', text: 'Erreur, navigateur incompatible avec les requêtes CORS.', timeout: '5000'});
-                return;
-            }
-
-            xhr.onload = function() {
-                console.log(xhr.responseText);
-                var jsonRep = JSON.parse(xhr.responseText);
-                if (!jsonRep.hasOwnProperty("code"))
-                {
-                    //{totcmd:16,actual:16,startTime:18:41:54 31-03-2015}
-                    var progress = Math.ceil(jsonRep.actual/jsonRep.totcmd*100);
-                    if (progress==100)
-                    {
-                        clearInterval(timer);
-
-                        eId('render.modal.buttonStart').disabled = false;
-
-                        var myElements = document.querySelectorAll(".renderStatsV");
-
-                        for (var i = 0; i < myElements.length; i++) {
-                            myElements[i].className = myElements[i].className.replace("renderStatsV", "renderStats");
-                        }
-                        noty({layout: 'topRight', type: 'info', text: 'Rendu Terminé  !', timeout: '5000'});
-
-                        url = config.apiPath + 'php/renderStat.php?action=delete&id='+currentProject.username+"_"+currentProject.name;
-                        var xhr2 = createCORSRequest('GET', url);
-                        xhr2.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                        xhr2.send();
-                        listAvailableRenderFiles();
-                    }
-                    else
-                    {
-                        eId('startedDate').innerHTML = "Début du traitement : "+jsonRep.startTime;
-                        eId('SrvLoad').innerHTML = "Charge du serveur : "+jsonRep.wait;
-                        console.log(progress);
-                        eId('renderProgress').style.width = progress+"%";
-                    }
-                }
-
-            };
-
-            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            xhr.send();
-
-        }, 10000);
+        var timer = window.setInterval(onInterval(timer), 10);
 
         format = document.getElementById("renderFormat").options[document.getElementById("renderFormat").selectedIndex].value;
         console.log("format", format);
-       renderVar = new RenderP(format);
+        renderVar = new RenderP(format);
     }
     else
     {
@@ -88,6 +37,58 @@ function makeRender(format) {
         noty({layout: 'topRight', type: 'error', text: 'Le rendu ne peux pas être lancé, des fichiers n\'ont pas été envoyés ou sont en cours d\'envois', timeout: '4000'});
     }
 }
+
+function onInterval(timer) {
+
+    var url = config.apiPath + 'php/renderStat.php?action=read&id=' + currentProject.username + "_" + currentProject.name;
+
+    var xhr = createCORSRequest('GET', url);
+
+    if (!xhr) {
+        noty({ layout: 'topRight', type: 'error', text: 'Erreur, navigateur incompatible avec les requêtes CORS.', timeout: '5000' });
+        return;
+    }
+
+    xhr.onload = function() {
+        console.log("HOTDOGS: " + xhr.responseText);
+        var jsonRep = JSON.parse(xhr.responseText);
+        if (!jsonRep.hasOwnProperty("code")) {
+            //{totcmd:16,actual:16,startTime:18:41:54 31-03-2015}
+            var progress = Math.ceil(jsonRep.actual / jsonRep.totcmd * 100);
+            if (progress == 100) {
+                clearInterval(timer);
+
+                eId('render.modal.buttonStart').disabled = false;
+
+                var myElements = document.querySelectorAll(".renderStatsV");
+
+                for (var i = 0; i < myElements.length; i++) {
+                    myElements[i].className = myElements[i].className.replace("renderStatsV", "renderStats");
+                }
+                noty({ layout: 'topRight', type: 'info', text: 'Rendu Terminé  !', timeout: '5000' });
+
+                url = config.apiPath + 'php/renderStat.php?action=delete&id=' + currentProject.username + "_" + currentProject.name;
+                var xhr2 = createCORSRequest('GET', url);
+                xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr2.send();
+                listAvailableRenderFiles();
+            }
+            else {
+                eId('startedDate').innerHTML = "Début du traitement : " + jsonRep.startTime;
+                eId('SrvLoad').innerHTML = "Charge du serveur : " + jsonRep.wait;
+                console.log(progress);
+                eId('renderProgress').style.width = progress + "%";
+            }
+        }
+
+    };
+
+
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send();
+
+}
+
 
 function listAvailableRenderFiles()
 {
@@ -101,7 +102,7 @@ function listAvailableRenderFiles()
     }
 
     xhr.onload = function() {
-        console.log(xhr.responseText);
+        console.log("HERE: " + xhr.responseText);
         var jsonRep = JSON.parse(xhr.responseText);
 
         var ul = document.getElementById('renderList');

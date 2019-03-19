@@ -24,7 +24,7 @@ function rLog(text) {
 
 function rConsole() {
     if(document.getElementById('console').style.display == 'none') {
-        document.getElementById('iconRConsole').classList.remove('glyphicon-unchecked');
+        document.getElementById('iconRConsole').classList.remove('glyploicon-unchecked');
         document.getElementById('iconRConsole').classList.add('glyphicon-check');
 
         document.getElementById('console').style.display = '';
@@ -68,6 +68,9 @@ function rowById(id, tab){
 }
 
 function timeToSeconds(time) {
+    if(time == undefined){
+        time == "00:00:00";
+    }
     var timeSplit = time.split(':');
 
     return (parseInt(timeSplit[0]) * 3600) + (parseInt(timeSplit[1] * 60)) + parseInt(timeSplit[2].split('.')[0]);
@@ -184,7 +187,7 @@ String.prototype.deleteAccent = function(){
 
 function findFirstDescendant(parent, tagname){
     parent = document.getElementById(parent);
-    var descendants = parent.getElementsByTagName(tagname);
+    var descendants =    parent.getElementsByTagName(tagname);
     if ( descendants.length )
         return descendants[0];
     return null;
@@ -210,7 +213,7 @@ function dataUrlToBlob(dataURL) {
     for (var i = 0; i < rawLength; ++i) {
         uInt8Array[i] = raw.charCodeAt(i);
     }
-
+    
     return new Blob([uInt8Array], {type: contentType});
 }
 function secondToTime(seconds){

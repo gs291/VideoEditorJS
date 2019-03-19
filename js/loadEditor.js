@@ -88,12 +88,12 @@ function getCookie(cname) {
 
 function loadTranslation(fileName) {
     var xhr = xmlHTTP();
-
     xhr.open("GET", 'translations/' + fileName + '.lang.json', false);
     xhr.send(null);
-    if(xhr.readyState != 4 || (xhr.status != 200 && xhr.status != 0)) // Code == 0 en local
-        throw new Error("Impossible de charger le fichier de traduction \"" + fileName + ".lang\" (code HTTP : " + xhr.status + ").");
 
+    if(xhr.readyState != 4 || (xhr.status != 200 && xhr.status != 0)) // Code == 0 en local
+    throw new Error("Impossible de charger le fichier de traduction \"" + fileName + ".lang\" (code HTTP : " + xhr.status + ").");
+    
     tabTranslations = JSON.parse(xhr.responseText);
 
     for(var i = 0; i < tabTranslations.translations.length; i++) {

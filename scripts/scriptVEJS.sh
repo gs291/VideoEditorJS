@@ -1,8 +1,8 @@
 #!/bin/bash
 #define all path ans vars that are usefull
-DATAPATH="/home/clangue/VEJSFiles"
-LOGPATH="/home/clangue/videoProcess/logs"
-TEMPDIR="/home/clangue/videoProcess/tmp"
+DATAPATH="/mnt/c/Users/austi/OneDrive/Documents/Classes/CS362/VideoEditRun" #"/home/clangue/VEJSFiles"
+LOGPATH="/mnt/c/Users/austi/OneDrive/Documents/Classes/CS362/VideoEditRun/Logs" #/home/clangue/videoProcess/logs"
+TEMPDIR="/mnt/c/Users/austi/OneDrive/Documents/Classes/CS362/VideoEditRun/Temp" #"/home/clangue/videoProcess/tmp"
 WEBSERVPHPDir="http://clangue.net/other/testVideo/php"
 FFMPEGPATH="ffmpeg"
 THREADS=4
